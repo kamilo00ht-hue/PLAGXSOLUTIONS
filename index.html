@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLAGXSOLUTIONS - Plataforma Inteligente</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/estilos.css">
+
+    <!-- ICONOS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+    <div class="logo">
+        <img src="img/logo.png" alt="Logo" class="logo-img">
+        <h2>PLAGXSOLUTIONS</h2>
+        <p style="text-align:center;font-size:12px;">Plataforma Inteligente</p>
+    </div>
+
+    <nav>
+        <ul>
+            <li class="active"><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+            <li><a href="#clientes"><i class="fas fa-users"></i> Clientes</a></li>
+            <li><a href="#citas"><i class="fas fa-calendar-alt"></i> Citas</a></li>
+            <li><a href="#estadisticas"><i class="fas fa-chart-bar"></i> Estadísticas</a></li>
+            <li><a href="#proceso"><i class="fas fa-list-ol"></i> Proceso</a></li>
+        </ul>
+    </nav>
+</aside>
+
+<!-- ===== CONTENIDO ===== -->
+<main class="main-content">
+
+<header class="top-bar">
+    <h1>Panel de Control</h1>
+    <div class="actions">
+        <span class="notif"><i class="fas fa-bell"></i><span>3</span></span>
+        <i class="fas fa-cog"></i>
+        <i class="fas fa-user"></i>
+    </div>
+</header>
+
+<!-- ===== INICIO ===== -->
+<section id="inicio" class="section">
+    <h2>Bienvenido a PLAGXSOLUTIONS</h2>
+
+    <div class="stats-grid">
+
+        <div class="card">
+            <i class="fas fa-users icon"></i>
+            <h3>Total Clientes</h3>
+            <p class="number">245</p>
+            <span class="trend green">+12% este mes</span>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-calendar-day icon"></i>
+            <h3>Citas Hoy</h3>
+            <p class="number">8</p>
+            <span>3 pendientes</span>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-check-circle icon"></i>
+            <h3>Completadas</h3>
+            <p class="number">156</p>
+            <span>Este mes</span>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-clock icon"></i>
+            <h3>Pendientes</h3>
+            <p class="number">12</p>
+            <span>Próximos días</span>
+        </div>
+
+    </div>
+
+    <button class="btn-add"><i class="fas fa-plus"></i> Nueva Cita</button>
+</section>
+
+<!-- ===== CITAS ===== -->
+<section id="citas" class="section hidden">
+    <h2>Gestión de Citas</h2>
+
+    <div class="citas-container">
+
+        <div class="calendar">
+            <h3>Febrero 2026</h3>
+            <table class="cal-table">
+                <tr>
+                    <th>Dom</th><th>Lun</th><th>Mar</th><th>Mie</th><th>Jue</th><th>Vie</th><th>Sáb</th>
+                </tr>
+                <tr>
+                    <td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td>
+                </tr>
+                <tr>
+                    <td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td>
+                </tr>
+                <tr>
+                    <td>14</td><td class="active">15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="citas-list">
+            <h3>Citas para hoy</h3>
+            <p>No hay citas programadas.</p>
+            <button class="btn-add"><i class="fas fa-plus"></i> Agendar Cita</button>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== ESTADISTICAS ===== -->
+<section id="estadisticas" class="section hidden">
+    <h2>Estadísticas</h2>
+
+    <div class="card">
+        <h3>Ingresos Totales</h3>
+        <p class="number">$229.100</p>
+        <span class="trend green">+12% anual</span>
+    </div>
+
+    <div class="charts">
+        <div class="chart-placeholder">Gráfico de citas mensuales</div>
+        <div class="chart-placeholder pie">Distribución de plagas</div>
+    </div>
+</section>
+
+<!-- ===== PROCESO ===== -->
+<section id="proceso" class="section hidden">
+    <h2>Proceso del Servicio</h2>
+    <ol>
+        <li>Inspección del lugar.</li>
+        <li>Identificación de plaga.</li>
+        <li>Aplicación del tratamiento.</li>
+        <li>Seguimiento posterior.</li>
+        <li>Recomendaciones al cliente.</li>
+    </ol>
+</section>
+
+</main>
+
+<!-- ===== SCRIPT NAVEGACION ===== -->
+<script>
+document.querySelectorAll('nav a').forEach(link=>{
+    link.addEventListener('click',e=>{
+        e.preventDefault();
+
+        document.querySelectorAll('.section').forEach(sec=>{
+            sec.classList.add('hidden');
+        });
+
+        document.querySelectorAll('nav li').forEach(li=>{
+            li.classList.remove('active');
+        });
+
+        const target=document.querySelector(link.getAttribute('href'));
+        target.classList.remove('hidden');
+        link.parentElement.classList.add('active');
+    });
+});
+</script>
+
+</body>
+</html>
