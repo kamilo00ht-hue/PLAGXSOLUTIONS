@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login - PLAGXSOLUTIONS</title>
-
-<!-- IMPORTANTE: ruta correcta al CSS -->
-<link rel="stylesheet" href="css/estilos.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - PLAGXSOLUTIONS</title>
+  <link rel="stylesheet" href="css/estilos.css" />
 </head>
-
 <body class="login-body">
-
-<div class="login-container">
-
-    <img src="img/logo.png" class="login-logo">
-
+  <div class="login-container">
+    <img src="img/logo.png" class="login-logo" alt="Logo PLAGXSOLUTIONS" />
     <h2>PLAGXSOLUTIONS</h2>
-    <p style="margin-bottom:15px; color:gray;">Ingreso al sistema</p>
+    <p class="muted">Ingreso al sistema</p>
 
-    <input type="text" id="usuario" placeholder="Usuario">
-    <input type="password" id="clave" placeholder="Contraseña">
+    <form id="loginForm" class="stack-gap" novalidate>
+      <input type="text" id="usuario" placeholder="Usuario" autocomplete="username" required />
+      <input type="password" id="clave" placeholder="Contraseña" autocomplete="current-password" required />
+      <button type="submit">Ingresar</button>
+    </form>
 
-    <button onclick="login()">Ingresar</button>
+    <button id="toggleRegister" class="btn-secondary" type="button">Crear cuenta de empleado</button>
 
-    <p id="error"></p>
+    <form id="registerForm" class="stack-gap hidden" novalidate>
+      <input type="text" id="regUsuario" placeholder="Nuevo usuario" required />
+      <input type="password" id="regClave" placeholder="Nueva contraseña" required />
+      <button type="submit">Registrar</button>
+    </form>
 
-</div>
+    <p id="error" class="error-text"></p>
+    <p class="hint">Usuarios iniciales: <strong>admin/1234</strong> y <strong>employee/pass123</strong>.</p>
+  </div>
 
-<!-- JS -->
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
