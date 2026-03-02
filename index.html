@@ -84,6 +84,28 @@
     <button class="btn-add"><i class="fas fa-plus"></i> Nueva Cita</button>
 </section>
 
+
+<!-- ===== CLIENTES ===== -->
+<section id="clientes" class="section hidden">
+    <h2>Gestión de Clientes</h2>
+
+    <div class="stats-grid">
+        <div class="card">
+            <i class="fas fa-user-plus icon"></i>
+            <h3>Nuevos este mes</h3>
+            <p class="number">18</p>
+            <span class="trend green">+8% vs mes anterior</span>
+        </div>
+
+        <div class="card">
+            <i class="fas fa-id-card icon"></i>
+            <h3>Clientes Activos</h3>
+            <p class="number">214</p>
+            <span>Con servicios en curso</span>
+        </div>
+    </div>
+</section>
+
 <!-- ===== CITAS ===== -->
 <section id="citas" class="section hidden">
     <h2>Gestión de Citas</h2>
@@ -162,6 +184,12 @@ document.querySelectorAll('nav a').forEach(link=>{
         });
 
         const target=document.querySelector(link.getAttribute('href'));
+
+        if(!target){
+            console.warn('Sección no encontrada:', link.getAttribute('href'));
+            return;
+        }
+
         target.classList.remove('hidden');
         link.parentElement.classList.add('active');
     });
