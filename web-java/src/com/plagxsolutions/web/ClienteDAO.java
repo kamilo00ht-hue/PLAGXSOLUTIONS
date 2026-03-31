@@ -1,7 +1,4 @@
-package com.plagxsolutions.web.dao;
-
-import com.plagxsolutions.web.model.Cliente;
-import com.plagxsolutions.web.util.ConexionDB;
+package com.plagxsolutions.web;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,11 +8,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteDAO {
-    public List<Cliente> listar() {
+
+    public static class Cliente {
+        private int idCliente;
+        private String nombre;
+        private String direccion;
+        private String telefono;
+        private String email;
+
+        public int getIdCliente() { return idCliente; }
+        public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
+        public String getNombre() { return nombre; }
+        public void setNombre(String nombre) { this.nombre = nombre; }
+        public String getDireccion() { return direccion; }
+        public void setDireccion(String direccion) { this.direccion = direccion; }
+        public String getTelefono() { return telefono; }
+        public void setTelefono(String telefono) { this.telefono = telefono; }
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
+    }
+
+    // CREATE
+    public void createCliente(Cliente cliente) throws SQLException {
+        String sql = "INSERT INTO clientes (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, cliente.getNombre());
+            preparedStatement.setString(2, cliente.getDireccion());
+            preparedStatement.setString(3, cliente.getTelefono());
+            preparedStatement.setString(4, cliente.getEmail());
+            preparedStatement.executeUpdate();
+        }
+    }
+
+    // READ
+    public List<Cliente> getClientes() {
         String sql = "SELECT id_cliente, nombre, direccion, telefono, email FROM clientes";
         List<Cliente> clientes = new ArrayList<>();
 
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -33,21 +64,9 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public void crear(Cliente cliente) throws SQLException {
-        String sql = "INSERT INTO clientes (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)";
-        try (Connection connection = ConexionDB.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, cliente.getNombre());
-            preparedStatement.setString(2, cliente.getDireccion());
-            preparedStatement.setString(3, cliente.getTelefono());
-            preparedStatement.setString(4, cliente.getEmail());
-            preparedStatement.executeUpdate();
-        }
-    }
-
-    public Cliente obtenerPorId(int idCliente) {
+    public Cliente getClienteById(int idCliente) {
         String sql = "SELECT id_cliente, nombre, direccion, telefono, email FROM clientes WHERE id_cliente = ?";
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, idCliente);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -67,9 +86,10 @@ public class ClienteDAO {
         return null;
     }
 
-    public void actualizar(Cliente cliente) throws SQLException {
+    // UPDATE
+    public void updateCliente(Cliente cliente) throws SQLException {
         String sql = "UPDATE clientes SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id_cliente = ?";
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, cliente.getNombre());
             preparedStatement.setString(2, cliente.getDireccion());
@@ -80,9 +100,10 @@ public class ClienteDAO {
         }
     }
 
-    public void eliminar(int idCliente) throws SQLException {
+    // DELETE
+    public void deleteCliente(int idCliente) throws SQLException {
         String sql = "DELETE FROM clientes WHERE id_cliente = ?";
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, idCliente);
             preparedStatement.executeUpdate();

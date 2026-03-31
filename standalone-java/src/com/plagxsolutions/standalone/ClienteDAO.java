@@ -9,9 +9,10 @@ import java.util.List;
 
 public class ClienteDAO {
 
-    public boolean crearCliente(Cliente cliente) {
+    // CREATE operation.
+    public boolean createCliente(Cliente cliente) {
         String sql = "INSERT INTO clientes (nombre, direccion, telefono, email) VALUES (?, ?, ?, ?)";
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, cliente.getNombre());
             preparedStatement.setString(2, cliente.getDireccion());
@@ -19,37 +20,39 @@ public class ClienteDAO {
             preparedStatement.setString(4, cliente.getEmail());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.out.println("Error al crear cliente: " + exception.getMessage());
+            System.out.println("Error createCliente: " + exception.getMessage());
             return false;
         }
     }
 
-    public List<Cliente> consultarClientes() {
-        List<Cliente> clientes = new ArrayList<>();
+    // READ operation.
+    public List<Cliente> getClientes() {
         String sql = "SELECT id_cliente, nombre, direccion, telefono, email FROM clientes";
-        try (Connection connection = ConexionDB.getConnection();
+        List<Cliente> clientes = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet resultSet = preparedStatement.executeQuery()) {
-
             while (resultSet.next()) {
-                Cliente cliente = new Cliente(
+                clientes.add(new Cliente(
                         resultSet.getInt("id_cliente"),
                         resultSet.getString("nombre"),
                         resultSet.getString("direccion"),
                         resultSet.getString("telefono"),
                         resultSet.getString("email")
-                );
-                clientes.add(cliente);
+                ));
             }
         } catch (SQLException exception) {
-            System.out.println("Error al consultar clientes: " + exception.getMessage());
+            System.out.println("Error getClientes: " + exception.getMessage());
         }
+
         return clientes;
     }
 
-    public boolean actualizarCliente(Cliente cliente) {
+    // UPDATE operation.
+    public boolean updateCliente(Cliente cliente) {
         String sql = "UPDATE clientes SET nombre = ?, direccion = ?, telefono = ?, email = ? WHERE id_cliente = ?";
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, cliente.getNombre());
             preparedStatement.setString(2, cliente.getDireccion());
@@ -58,19 +61,20 @@ public class ClienteDAO {
             preparedStatement.setInt(5, cliente.getIdCliente());
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.out.println("Error al actualizar cliente: " + exception.getMessage());
+            System.out.println("Error updateCliente: " + exception.getMessage());
             return false;
         }
     }
 
-    public boolean eliminarCliente(int idCliente) {
+    // DELETE operation.
+    public boolean deleteCliente(int idCliente) {
         String sql = "DELETE FROM clientes WHERE id_cliente = ?";
-        try (Connection connection = ConexionDB.getConnection();
+        try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, idCliente);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.out.println("Error al eliminar cliente: " + exception.getMessage());
+            System.out.println("Error deleteCliente: " + exception.getMessage());
             return false;
         }
     }

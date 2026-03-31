@@ -1,87 +1,109 @@
-# PLAGXSOLUTIONS - GA7-220501096-AA2-EV01
+# PLAGXSOLUTIONS - Evidencia SENA GA7-220501096-AA2-EV01
 
-Proyecto académico para la evidencia **“Codificación de módulos del software según requerimientos del proyecto”** del SENA.
+## 1. Descripción del proyecto
+PLAGXSOLUTIONS es un prototipo académico para gestión de clientes en una empresa de control de plagas.
+Este repositorio fue desarrollado para demostrar la evidencia del SENA:
+**"Codificación de módulos del software según requerimientos del proyecto"**.
 
-## 1) Descripción del proyecto
-PLAGXSOLUTIONS es un sistema para gestión de clientes en una empresa de control de plagas.
+Se implementan tres módulos con CRUD de `clientes`:
+- Stand-alone Java (JDBC + MySQL)
+- Web Java (Servlets/JSP + MySQL)
+- Móvil Android (Kotlin + SQLite)
 
-Este repositorio incluye tres módulos diferentes (stand-alone, web y móvil) para demostrar capacidades de desarrollo en distintos entornos y el manejo de CRUD completo sobre la tabla `clientes`.
+## 2. Tecnologías utilizadas
+- Java
+- JDBC
+- MySQL
+- Servlets
+- JSP
+- Android Kotlin
+- SQLite
+- Git
 
-## 2) Tecnologías utilizadas
-- **Base de datos:** MySQL.
-- **Módulo stand-alone:** Java consola + JDBC.
-- **Módulo web:** Java Servlets + JSP + JDBC.
-- **Módulo móvil:** Android (Kotlin) + SQLite.
-- **Control de versiones:** Git.
-
-## 3) Estructura del proyecto
+## 3. Estructura del proyecto
 ```text
 PLAGXSOLUTIONS/
   README.md
-  standalone-java/
-  web-java/
-  mobile-android/
   database/
+    schema.sql
+  standalone-java/
+    src/com/plagxsolutions/standalone/
+      Main.java
+      Cliente.java
+      ClienteDAO.java
+      DatabaseConnection.java
+  web-java/
+    src/com/plagxsolutions/web/
+      ClienteServlet.java
+      DatabaseConnection.java
+      ClienteDAO.java
+    webapp/
+      index.jsp
+      clientes.jsp
+      cliente-form.jsp
+  mobile-android/
+    app/src/main/java/com/plagxsolutions/mobile/
+      MainActivity.kt
+      Cliente.kt
+      ClienteDbHelper.kt
+      ClienteRepository.kt
+      ClienteFormActivity.kt
 ```
 
-## 4) Base de datos
-Script disponible en `database/schema.sql`.
+## 4. Estándar de codificación
+- Clases: **PascalCase**
+- Métodos: **camelCase**
+- Variables: **camelCase**
+- Constantes: **UPPER_CASE**
+
+Además, se agregan comentarios para explicar:
+- conexión a base de datos,
+- operaciones CRUD,
+- lógica de negocio relevante.
+
+## 5. Ejecución de cada módulo
+### Standalone (Java consola)
+Ubicación:
+`standalone-java/src/com/plagxsolutions/standalone/`
+
+Comandos ejemplo:
+```bash
+javac *.java
+java Main
+```
+
+### Web (Servlets + JSP)
+1. Configurar Tomcat (o contenedor Jakarta compatible).
+2. Copiar el módulo `web-java` al servidor.
+3. Desplegar y abrir:
+   - `/webapp/index.jsp`
+   - `/clientes`
+
+### Móvil (Android)
+1. Abrir `mobile-android` en Android Studio.
+2. Sincronizar Gradle del proyecto.
+3. Ejecutar en emulador o dispositivo.
+
+## 6. Base de datos
+Archivo: `database/schema.sql`
 
 ```sql
 CREATE TABLE clientes(
   id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-  nombre VARCHAR(100),
+  nombre VARCHAR(100) NOT NULL,
   direccion VARCHAR(150),
   telefono VARCHAR(20),
   email VARCHAR(100)
 );
 ```
 
-## 5) Módulo stand-alone (Java + JDBC)
-Ruta: `standalone-java/src/com/plagxsolutions/standalone/`
-
-Incluye:
-- Conexión JDBC con `DriverManager`, `Connection`.
-- Operaciones CRUD con `PreparedStatement` y consultas con `ResultSet`.
-- Menú por consola para crear, consultar, actualizar y eliminar clientes.
-
-## 6) Módulo web (Servlets + JSP + JDBC)
-Ruta: `web-java/`
-
-Incluye:
-- Servlet `ClienteServlet` para flujo CRUD.
-- DAO JDBC para operaciones de base de datos.
-- Vistas JSP:
-  - `clientes-list.jsp`
-  - `cliente-form.jsp`
-
-## 7) Módulo móvil (Android Kotlin)
-Ruta: `mobile-android/`
-
-Incluye:
-- `ClienteDbHelper` con SQLite.
-- `ClienteRepository` con CRUD.
-- `MainActivity` para listar clientes.
-- `ClienteFormActivity` para registrar clientes.
-
-## 8) Estándar de codificación aplicado
-- **Clases:** PascalCase.
-- **Variables y métodos:** camelCase.
-- **Comentarios:** se agregan en operaciones importantes para mejorar comprensión académica.
-- **Responsabilidad única:** separación por capas (`model`, `dao`, `controller`, `util`).
-
-## 9) Ejemplo de flujo Git solicitado
+## 7. Flujo de trabajo Git (ejemplo)
 ```bash
 git init
 git add .
-git commit -m "Inicializar proyecto"
-git commit -m "Implementar conexión JDBC"
-git commit -m "Implementar CRUD clientes"
+git commit -m "Initialize project structure"
+git commit -m "Implement JDBC connection"
+git commit -m "Implement CRUD operations"
+git commit -m "Add web module"
+git commit -m "Add Android module"
 ```
-
-## 10) Observaciones académicas
-Los tres módulos no requieren integración entre sí para esta evidencia. El objetivo principal es demostrar:
-- Programación funcional.
-- Uso de JDBC y CRUD.
-- Uso de control de versiones.
-- Aplicación de estándar de codificación.
