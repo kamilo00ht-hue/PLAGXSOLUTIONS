@@ -1,3 +1,10 @@
-export default function Page() {
-  return <div className="rounded-2xl border border-cyan-300/20 bg-[#102542]/70 p-6 text-slate-200">Módulo reports en construcción.</div>;
+import { ReportsBoard } from '@/features/reports/reports-board';
+
+export default function ReportsPage() {
+  return (
+    <div className="space-y-5">
+      <h2 className="text-2xl font-semibold">Reports & Analytics</h2>
+      <ReportsBoard />
+    </div>
+  );
 }

@@ -1,3 +1,10 @@
-export default function Page() {
-  return <div className="rounded-2xl border border-cyan-300/20 bg-[#102542]/70 p-6 text-slate-200">Módulo schedule en construcción.</div>;
+import { ScheduleBoard } from '@/features/schedule/schedule-board';
+
+export default function SchedulePage() {
+  return (
+    <div className="space-y-5">
+      <h2 className="text-2xl font-semibold">Schedule</h2>
+      <ScheduleBoard />
+    </div>
+  );
 }

@@ -1,1 +1,1 @@
-export const servicesFeature = 'services';
+export * from './services-board';

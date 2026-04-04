@@ -1,7 +1,8 @@
+import type { ReactNode } from 'react';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
+export function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-[#0a192f] text-slate-100 lg:flex">
       <Sidebar />

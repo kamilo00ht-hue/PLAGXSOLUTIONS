@@ -1,49 +1,56 @@
-# PLAGXSOLUTIONS SaaS Platform
+# PLAGXSOLUTIONS SaaS
 
-Plataforma SaaS premium para gestión empresarial de control de plagas, diseñada con enfoque moderno tipo Stripe/Vercel/Linear.
+Plataforma SaaS premium para gestión profesional de control de plagas con experiencia dark-first empresarial.
 
-## Stack
+## Stack principal
 - Next.js 15 (App Router)
 - TypeScript
 - Tailwind CSS
-- shadcn/ui (componentes base)
 - Framer Motion
+- Base preparada para shadcn/ui y backend tipado
 
-## Branding (bloqueado)
-- Azul oscuro principal: `#0A192F`
-- Acento cian: `#00F5FF`
-- Acento violeta: `#7B2CBF`
+## Branding (fijo)
+- Azul oscuro: `#0A192F`
+- Cian: `#00F5FF`
+- Violeta: `#7B2CBF`
 
-## Estructura principal
+## Arquitectura principal
 ```text
 src/
-├── app/
-│   ├── (landing)/
-│   ├── (dashboard)/
-│   ├── layout.tsx
-│   └── globals.css
-├── components/
-│   ├── ui/
-│   ├── layout/
-│   ├── dashboard/
-│   └── features/
-├── features/
-│   ├── clients/
-│   ├── services/
-│   ├── schedule/
-│   ├── reports/
-│   └── dashboard/
-├── lib/
-├── hooks/
-└── types/
+  app/
+    (landing)/
+    (dashboard)/
+    layout.tsx
+    globals.css
+  components/
+    ui/
+    layout/
+    dashboard/
+    features/
+  features/
+    clients/
+    dashboard/
+    reports/
+    schedule/
+    services/
+    settings/
+  lib/
+  hooks/
+  types/
+  server/
+    api/
+    db/
+    services/
 ```
 
-## Qué incluye esta versión
-- Landing pública premium con secciones: Hero, Problem, Solution, Services, How It Works, Benefits y CTA final.
-- Dashboard privado con sidebar y módulos principales.
-- Módulo funcional **Dashboard** con KPIs empresariales.
-- Módulo funcional **Clients** con CRUD (crear, editar, eliminar y listar).
-- Componentes reutilizables clave: Button, Card, Input, Table, Modal.
+## Módulos funcionales listos
+- Landing SaaS premium (Hero, Problem, Solution, Services, How It Works, Benefits, CTA).
+- Dashboard con KPIs y navegación privada.
+- Clients con CRUD completo (crear, editar, eliminar, listar y filtrar).
+- Schedule con agenda diaria + vista mensual simple.
+- Services con operación por tipo de plaga/estado/técnico.
+- Reports con métricas y bloque de preparación para exportación.
+- Settings con configuración base operacional.
 
 ## Ejecución
 ```bash
@@ -53,7 +60,15 @@ npm run dev
 
 Abrir en `http://localhost:3000`.
 
-## Notas de arquitectura
-- UI orientada a producto SaaS dark-premium.
-- Tipografías: Inter + Space Grotesk.
-- Animaciones con Framer Motion en landing, cards y modal.
+## Validación recomendada
+```bash
+npm run typecheck
+npm run build
+```
+
+## Módulos académicos preservados
+Se mantienen aislados para fines de evidencia SENA y no bloquean la app SaaS principal:
+- `standalone-java/`
+- `web-java/`
+- `mobile-android/`
+- `database/`

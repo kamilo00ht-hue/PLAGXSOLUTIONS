@@ -1,1 +1,1 @@
-export const reportsFeature = 'reports';
+export * from './reports-board';

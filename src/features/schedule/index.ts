@@ -1,1 +1,1 @@
-export const scheduleFeature = 'schedule';
+export * from './schedule-board';

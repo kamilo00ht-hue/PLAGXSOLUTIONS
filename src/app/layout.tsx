@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   description: 'Plataforma premium para gestión empresarial de control de plagas.'
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
       <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>{children}</body>
