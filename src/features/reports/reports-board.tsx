@@ -1,22 +1,19 @@
+'use client';
+
+import { trpc } from '@/lib/trpc';
 import { Card } from '@/components/ui/card';
 
 export function ReportsBoard() {
+  const { data, isLoading } = trpc.reports.getDashboardMetrics.useQuery();
+
+  if (isLoading || !data) return <Card>Cargando reportes...</Card>;
+
   return (
-    <div className="grid gap-4 lg:grid-cols-3">
-      {[
-        ['Servicios ejecutados', '142'],
-        ['Satisfacción cliente', '94%'],
-        ['Tiempo promedio respuesta', '2.4h']
-      ].map(([k, v]) => (
-        <Card key={k}>
-          <p className="text-sm text-slate-400">{k}</p>
-          <p className="mt-2 text-3xl font-semibold text-cyan-100">{v}</p>
-        </Card>
-      ))}
-      <Card className="lg:col-span-3">
-        <h3 className="mb-2 text-lg font-semibold text-cyan-100">Exportación futura</h3>
-        <p className="text-slate-300">La estructura está lista para conectar exportación CSV/PDF y reportes comparativos por periodos.</p>
-      </Card>
+    <div className="grid gap-4 lg:grid-cols-4">
+      <Card><p className="text-sm text-slate-400">Total clients</p><p className="mt-2 text-3xl font-semibold text-cyan-100">{data.totalClients}</p></Card>
+      <Card><p className="text-sm text-slate-400">Active services</p><p className="mt-2 text-3xl font-semibold text-cyan-100">{data.activeServices}</p></Card>
+      <Card><p className="text-sm text-slate-400">Completed this month</p><p className="mt-2 text-3xl font-semibold text-cyan-100">{data.servicesCompletedThisMonth}</p></Card>
+      <Card><p className="text-sm text-slate-400">Appointments today</p><p className="mt-2 text-3xl font-semibold text-cyan-100">{data.appointmentsToday}</p></Card>
     </div>
   );
 }
