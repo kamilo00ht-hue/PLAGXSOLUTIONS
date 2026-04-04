@@ -1,9 +1,10 @@
 package com.plagxsolutions.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
- * Modelo de dominio para representar un cliente en el sistema PLAGXSOLUTIONS.
+ * Entidad de dominio para representar un cliente de PLAGXSOLUTIONS.
  */
 public class Cliente {
     private int id;
@@ -15,21 +16,21 @@ public class Cliente {
     private LocalDateTime fechaRegistro;
 
     /**
-     * Constructor vacío para inicializaciones parciales.
+     * Constructor vacío para frameworks o inicialización manual.
      */
     public Cliente() {
     }
 
     /**
-     * Constructor completo del modelo Cliente.
+     * Constructor completo para operaciones CRUD.
      *
-     * @param id identificador único
+     * @param id identificador del cliente
      * @param nombre nombre del cliente
      * @param apellido apellido del cliente
      * @param telefono teléfono del cliente
      * @param direccion dirección del cliente
-     * @param email correo del cliente
-     * @param fechaRegistro fecha de registro
+     * @param email correo electrónico del cliente
+     * @param fechaRegistro fecha y hora de registro
      */
     public Cliente(int id, String nombre, String apellido, String telefono, String direccion, String email,
                    LocalDateTime fechaRegistro) {
@@ -120,25 +121,75 @@ public class Cliente {
     }
 
     /**
-     * @param email nuevo correo electrónico del cliente
+     * @param email nuevo correo electrónico
      */
     public void setEmail(String email) {
         this.email = email;
     }
 
     /**
-     * @return fecha y hora de registro
+     * @return fecha de registro del cliente
      */
     public LocalDateTime getFechaRegistro() {
         return fechaRegistro;
     }
 
     /**
-     * @param fechaRegistro nueva fecha y hora de registro
+     * @param fechaRegistro nueva fecha de registro
      */
     public void setFechaRegistro(LocalDateTime fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
+
+    /**
+     * Representación legible para depuración y logs.
+     *
+     * @return texto del cliente
+     */
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", telefono='" + telefono + '\'' +
+                ", direccion='" + direccion + '\'' +
+                ", email='" + email + '\'' +
+                ", fechaRegistro=" + fechaRegistro +
+                '}';
+    }
+
+    /**
+     * Compara clientes por sus atributos principales.
+     *
+     * @param obj objeto a comparar
+     * @return true si son equivalentes
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Cliente other)) return false;
+        return id == other.id
+                && Objects.equals(nombre, other.nombre)
+                && Objects.equals(apellido, other.apellido)
+                && Objects.equals(telefono, other.telefono)
+                && Objects.equals(direccion, other.direccion)
+                && Objects.equals(email, other.email)
+                && Objects.equals(fechaRegistro, other.fechaRegistro);
+    }
+
+    /**
+     * Calcula hash de la entidad para colecciones hash.
+     *
+     * @return hash del cliente
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nombre, apellido, telefono, direccion, email, fechaRegistro);
+    }
 }
 
+// =====================================================
 // Archivo listo para evidencia SENA - GA7-220501096-AA2-EV01
+// Módulo Stand-alone Java + JDBC + Swing
+// =====================================================

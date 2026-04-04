@@ -5,10 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Clase utilitaria para centralizar la conexión JDBC a MySQL.
- *
- * <p>Esta clase permite que el módulo Stand-alone mantenga una sola configuración
- * de conexión para toda la aplicación.</p>
+ * Clase utilitaria para administrar la conexión JDBC con MySQL.
  */
 public final class ConexionJDBC {
     private static final String URL = "jdbc:mysql://localhost:3306/plagxsolutions";
@@ -16,18 +13,25 @@ public final class ConexionJDBC {
     private static final String CLAVE = "";
 
     private ConexionJDBC() {
-        // Evita instanciación de clase utilitaria.
+        // Constructor privado para evitar instanciación.
     }
 
     /**
-     * Obtiene una conexión activa hacia MySQL usando DriverManager.
+     * Obtiene una conexión JDBC activa con la base de datos.
      *
-     * @return conexión JDBC lista para usar
-     * @throws SQLException cuando falla la conexión con la base de datos
+     * @return conexión activa
+     * @throws SQLException excepción de conexión con mensaje claro
      */
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USUARIO, CLAVE);
+        try {
+            return DriverManager.getConnection(URL, USUARIO, CLAVE);
+        } catch (SQLException exception) {
+            throw new SQLException("No fue posible conectar a MySQL (plagxsolutions). Verifique servicio, usuario y clave.", exception);
+        }
     }
 }
 
+// =====================================================
 // Archivo listo para evidencia SENA - GA7-220501096-AA2-EV01
+// Módulo Stand-alone Java + JDBC + Swing
+// =====================================================

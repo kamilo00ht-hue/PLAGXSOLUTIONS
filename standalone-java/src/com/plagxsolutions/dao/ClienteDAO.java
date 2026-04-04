@@ -13,15 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Capa de acceso a datos para operaciones CRUD de la entidad Cliente.
+ * Capa de acceso a datos para la entidad Cliente.
  */
 public class ClienteDAO {
 
     /**
-     * Crea un cliente en la base de datos.
+     * Inserta un cliente en la base de datos.
      *
-     * @param cliente datos del cliente a insertar
-     * @return true si se insertó correctamente
+     * @param cliente cliente a insertar
+     * @return true cuando la operación es exitosa
      */
     public boolean create(Cliente cliente) {
         String sql = """
@@ -38,21 +38,20 @@ public class ClienteDAO {
             preparedStatement.setString(4, cliente.getDireccion());
             preparedStatement.setString(5, cliente.getEmail());
             preparedStatement.setTimestamp(6, Timestamp.valueOf(cliente.getFechaRegistro()));
-
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.err.println("Error al crear cliente: " + exception.getMessage());
+            System.err.println("Error SQL en create(): " + exception.getMessage());
             return false;
         }
     }
 
     /**
-     * Obtiene todos los clientes de la base de datos.
+     * Consulta todos los clientes registrados.
      *
-     * @return lista de clientes registrados
+     * @return lista de clientes
      */
     public List<Cliente> readAll() {
-        String sql = "SELECT id, nombre, apellido, telefono, direccion, email, fecha_registro FROM clientes";
+        String sql = "SELECT id, nombre, apellido, telefono, direccion, email, fecha_registro FROM clientes ORDER BY id DESC";
         List<Cliente> clientes = new ArrayList<>();
 
         try (Connection connection = ConexionJDBC.getConnection();
@@ -72,17 +71,16 @@ public class ClienteDAO {
                 clientes.add(cliente);
             }
         } catch (SQLException exception) {
-            System.err.println("Error al consultar clientes: " + exception.getMessage());
+            System.err.println("Error SQL en readAll(): " + exception.getMessage());
         }
-
         return clientes;
     }
 
     /**
-     * Actualiza un cliente existente en la base de datos.
+     * Actualiza datos de un cliente existente.
      *
-     * @param cliente cliente con datos nuevos
-     * @return true si se actualizó correctamente
+     * @param cliente cliente con nuevos datos
+     * @return true cuando se actualiza correctamente
      */
     public boolean update(Cliente cliente) {
         String sql = """
@@ -100,10 +98,9 @@ public class ClienteDAO {
             preparedStatement.setString(4, cliente.getDireccion());
             preparedStatement.setString(5, cliente.getEmail());
             preparedStatement.setInt(6, cliente.getId());
-
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.err.println("Error al actualizar cliente: " + exception.getMessage());
+            System.err.println("Error SQL en update(): " + exception.getMessage());
             return false;
         }
     }
@@ -111,8 +108,8 @@ public class ClienteDAO {
     /**
      * Elimina un cliente por su identificador.
      *
-     * @param id identificador del cliente
-     * @return true si se eliminó correctamente
+     * @param id id del cliente
+     * @return true cuando se elimina correctamente
      */
     public boolean delete(int id) {
         String sql = "DELETE FROM clientes WHERE id = ?";
@@ -123,20 +120,23 @@ public class ClienteDAO {
             preparedStatement.setInt(1, id);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            System.err.println("Error al eliminar cliente: " + exception.getMessage());
+            System.err.println("Error SQL en delete(): " + exception.getMessage());
             return false;
         }
     }
 
     /**
-     * Convierte un Timestamp SQL a LocalDateTime.
+     * Convierte un Timestamp de SQL a LocalDateTime.
      *
-     * @param timestamp valor en SQL
-     * @return fecha en formato LocalDateTime
+     * @param timestamp valor SQL
+     * @return fecha convertida
      */
     public LocalDateTime toLocalDateTime(Timestamp timestamp) {
         return timestamp != null ? timestamp.toLocalDateTime() : LocalDateTime.now();
     }
 }
 
+// =====================================================
 // Archivo listo para evidencia SENA - GA7-220501096-AA2-EV01
+// Módulo Stand-alone Java + JDBC + Swing
+// =====================================================
