@@ -1,0 +1,11 @@
+# Compilados Java
+*.class
+
+# Logs
+*.log
+
+# Archivos de IDE
+.idea/
+.vscode/
+
+# Archivo listo para evidencia SENA - GA7-220501096-AA2-EV01
