@@ -7,6 +7,7 @@ const input = z.object({ name: z.string().min(2), phone: z.string().min(5), emai
 
 export const techniciansRouter = router({
   getAll: protectedProcedure.query(({ ctx }) => ctx.db.select().from(technicians).where(eq(technicians.organizationId, ctx.orgId))),
+  getAllTechnicians: protectedProcedure.query(({ ctx }) => ctx.db.select().from(technicians).where(eq(technicians.organizationId, ctx.orgId))),
   create: protectedProcedure.input(input).mutation(({ ctx, input }) => ctx.db.insert(technicians).values({ ...input, organizationId: ctx.orgId }).returning()),
   update: protectedProcedure.input(input.extend({ id: z.string().uuid() })).mutation(({ ctx, input }) => {
     const { id, ...data } = input;

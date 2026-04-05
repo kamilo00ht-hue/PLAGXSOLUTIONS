@@ -10,9 +10,9 @@ export function DashboardOverview() {
 
   const widgets = [
     ['Clientes activos', String(data.totalClients)],
-    ['Servicios activos', String(data.activeServices)],
-    ['Completados mes', String(data.servicesCompletedThisMonth)],
-    ['Citas hoy', String(data.appointmentsToday)]
+    ['Servicios del mes', String(data.servicesThisMonth)],
+    ['Citas hoy', String(data.appointmentsToday)],
+    ['Técnicos activos', String(data.activeTechnicians)]
   ] as const;
 
   return <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">{widgets.map(([t, v]) => <KpiCard key={t} title={t} value={v} />)}</div>;

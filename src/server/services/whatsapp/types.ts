@@ -1,12 +1,15 @@
 export interface SendWhatsAppMessageInput {
-  tecnicoId: string;
+  organizationId: string;
+  tecnicoId?: string;
   tecnicoNombre: string;
   tecnicoTelefono: string;
-  citaId: string;
-  fechaCita: string;
-  horaCita: string;
-  direccionServicio: string;
+  citaId?: string;
+  clienteId?: string;
+  fechaCita?: string;
+  horaCita?: string;
+  direccionServicio?: string;
   descripcionServicio: string;
+  messageType: 'CONFIRMATION' | 'REMINDER' | 'REPORT_DELIVERY';
 }
 
 export interface WhatsAppApiResponse {

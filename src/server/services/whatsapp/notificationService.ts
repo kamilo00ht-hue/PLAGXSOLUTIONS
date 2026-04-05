@@ -1,45 +1,66 @@
-import { randomUUID } from 'node:crypto';
-import { whatsappLogs } from '../../db/schema/whatsappLogs';
-import type { MySql2Database } from 'drizzle-orm/mysql2';
+import { and, eq } from 'drizzle-orm';
+import { db } from '@/server/db';
+import { whatsappLogs } from '@/server/db/schema';
 import { sendWhatsAppMessage } from './whatsappClient';
 import type { SendWhatsAppMessageInput } from './types';
 
 function buildMessage(input: SendWhatsAppMessageInput): string {
+  const kindLabel = {
+    CONFIRMATION: 'Confirmación de cita',
+    REMINDER: 'Recordatorio de cita',
+    REPORT_DELIVERY: 'Entrega de reporte'
+  }[input.messageType];
+
   return [
-    `Cita ${input.citaId}`,
-    `${input.fechaCita} ${input.horaCita}`,
-    `${input.direccionServicio}`,
-    `${input.descripcionServicio}`
-  ].join(' | ');
+    `${kindLabel} para ${input.tecnicoNombre}`,
+    input.citaId ? `Cita ${input.citaId}` : undefined,
+    input.fechaCita ? `${input.fechaCita} ${input.horaCita ?? ''}`.trim() : undefined,
+    input.direccionServicio,
+    input.descripcionServicio
+  ].filter(Boolean).join(' | ');
 }
 
-export async function notifyTechnicianByWhatsApp(
-  db: MySql2Database,
-  input: SendWhatsAppMessageInput
-): Promise<void> {
+async function logWhatsAppMessage(input: SendWhatsAppMessageInput, status: 'SENT' | 'FAILED', providerMessageId?: string, providerError?: string) {
+  await db.insert(whatsappLogs).values({
+    organizationId: input.organizationId,
+    appointmentId: input.citaId ?? null,
+    clientId: input.clienteId ?? null,
+    technicianId: input.tecnicoId ?? null,
+    phoneTo: input.tecnicoTelefono,
+    messageType: input.messageType,
+    message: buildMessage(input),
+    status,
+    providerMessageId: providerMessageId ?? null,
+    providerError: providerError ?? null
+  });
+}
+
+export async function notifyTechnicianByWhatsApp(input: SendWhatsAppMessageInput): Promise<void> {
   try {
     const result = await sendWhatsAppMessage(input);
-
-    await db.insert(whatsappLogs).values({
-      id: randomUUID(),
-      tecnicoId: input.tecnicoId,
-      citaId: input.citaId,
-      telefonoDestino: input.tecnicoTelefono,
-      mensaje: buildMessage(input),
-      estado: 'SENT',
-      providerMessageId: result.messages?.[0]?.id ?? null
-    });
+    await logWhatsAppMessage(input, 'SENT', result.messages?.[0]?.id);
   } catch (error) {
-    await db.insert(whatsappLogs).values({
-      id: randomUUID(),
-      tecnicoId: input.tecnicoId,
-      citaId: input.citaId,
-      telefonoDestino: input.tecnicoTelefono,
-      mensaje: buildMessage(input),
-      estado: 'FAILED',
-      providerError: error instanceof Error ? error.message : 'Unknown error'
-    });
-
+    await logWhatsAppMessage(input, 'FAILED', undefined, error instanceof Error ? error.message : 'Unknown error');
     throw error;
   }
+}
+
+export async function sendAppointmentConfirmation(input: SendWhatsAppMessageInput): Promise<void> {
+  await notifyTechnicianByWhatsApp({ ...input, messageType: 'CONFIRMATION' });
+}
+
+export async function sendAppointmentReminder(input: SendWhatsAppMessageInput): Promise<void> {
+  await notifyTechnicianByWhatsApp({ ...input, messageType: 'REMINDER' });
+}
+
+export async function sendReportDelivery(input: SendWhatsAppMessageInput): Promise<void> {
+  await notifyTechnicianByWhatsApp({ ...input, messageType: 'REPORT_DELIVERY' });
+}
+
+export async function listOrganizationWhatsAppLogs(organizationId: string) {
+  return db.select().from(whatsappLogs).where(eq(whatsappLogs.organizationId, organizationId));
+}
+
+export async function getAppointmentWhatsAppLogs(organizationId: string, appointmentId: string) {
+  return db.select().from(whatsappLogs).where(and(eq(whatsappLogs.organizationId, organizationId), eq(whatsappLogs.appointmentId, appointmentId)));
 }

@@ -1,77 +1,37 @@
 # PLAGXSOLUTIONS SaaS
 
-Plataforma SaaS premium para gestión profesional de control de plagas, ahora con backend real usando tRPC + Drizzle + PostgreSQL.
+Plataforma SaaS multi-tenant para empresas de control de plagas en Colombia.
 
-## Stack principal
-- Next.js 15 (App Router)
-- TypeScript
-- Tailwind CSS
-- Framer Motion
+## Stack
+- Next.js (App Router)
+- TypeScript + Tailwind CSS
 - tRPC
-- Drizzle ORM
-- PostgreSQL
+- NextAuth (Credentials + JWT)
+- Drizzle ORM + PostgreSQL
+- Stripe (suscripciones)
+- WhatsApp Cloud API
 
-## Branding (fijo)
-- Azul oscuro: `#0A192F`
-- Cian: `#00F5FF`
-- Violeta: `#7B2CBF`
+## Multi-tenant
+Todas las tablas operativas están aisladas por `organizationId`.
 
-## Arquitectura principal
-```text
-src/
-  app/
-  components/
-  features/
-  hooks/
-  lib/
-  types/
-  server/
-    api/
-      routers/
-    db/
-    services/
+## Scripts
+```bash
+npm run dev
+npm run build
+npm run start
+npm run typecheck
+npm run db:generate
+npm run db:push
+npm run db:studio
 ```
 
-## Backend SaaS implementado
-- DB PostgreSQL en `src/server/db/schema.ts` y `src/server/db/index.ts`.
-- tRPC context/base en `src/server/api/trpc.ts`.
-- Routers en:
-  - `clients`
-  - `services`
-  - `schedule`
-  - `technicians`
-  - `reports`
-- Root router en `src/server/api/root.ts`.
-- Endpoint HTTP tRPC en `src/app/api/trpc/[trpc]/route.ts`.
-
-## Módulos de dashboard conectados a backend
-- Clients: CRUD real con tRPC.
-- Schedule: creación y consulta mensual de citas.
-- Services: listado real y cambio de estado.
-- Reports: métricas calculadas desde DB.
-- Dashboard: KPIs reales.
-
-## Variables de entorno
-Copiar `.env.example` como `.env`:
+## Setup
 ```bash
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/plagxsolutions
-```
-
-## Ejecución
-```bash
+cp .env.example .env
 npm install
+npm run db:push
 npm run dev
 ```
 
-## Validación
-```bash
-npm run typecheck
-npm run build
-```
-
-## Módulos académicos preservados
-Se mantienen aislados y sin mezclar con la app SaaS principal:
-- `standalone-java/`
-- `web-java/`
-- `mobile-android/`
-- `database/`
+## Producción
+Ver `DEPLOYMENT.md` y `Dockerfile`.

@@ -11,6 +11,7 @@ const items = [
   ['Services', '/services'],
   ['Technicians', '/technicians'],
   ['Reports & Analytics', '/reports'],
+  ['Billing', '/billing'],
   ['Settings', '/settings']
 ];
 

@@ -6,6 +6,8 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
+const statusOptions = ['scheduled', 'completed', 'cancelled'] as const;
+
 export function ScheduleBoard() {
   const utils = trpc.useUtils();
   const month = useMemo(() => new Date().toISOString().slice(0, 7), []);
@@ -15,7 +17,9 @@ export function ScheduleBoard() {
 
   const create = trpc.schedule.createAppointment.useMutation({ onSuccess: () => utils.schedule.getMonthlySchedule.invalidate({ month }) });
 
-  const [form, setForm] = useState({ clientId: '', technicianId: '', serviceId: '', date: `${month}-01`, time: '08:00', status: 'Scheduled' });
+  const [form, setForm] = useState({
+    clientId: '', technicianId: '', serviceId: '', date: `${month}-01T08:00:00.000Z`, time: '08:00', status: 'scheduled' as const
+  });
 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
@@ -31,10 +35,13 @@ export function ScheduleBoard() {
             {technicians.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
           <div className="grid grid-cols-2 gap-2">
-            <Input type="date" value={form.date} onChange={(e) => setForm((s) => ({ ...s, date: e.target.value }))} />
+            <Input type="datetime-local" value={form.date.slice(0, 16)} onChange={(e) => setForm((s) => ({ ...s, date: `${e.target.value}:00.000Z` }))} />
             <Input type="time" value={form.time} onChange={(e) => setForm((s) => ({ ...s, time: e.target.value }))} />
           </div>
-          <Button onClick={() => create.mutate({ ...form, serviceId: form.serviceId || undefined })}>Guardar cita</Button>
+          <select className="w-full rounded-xl border border-cyan-300/30 bg-[#0f2341] p-2" value={form.status} onChange={(e) => setForm((s) => ({ ...s, status: e.target.value as typeof statusOptions[number] }))}>
+            {statusOptions.map((status) => <option key={status} value={status}>{status}</option>)}
+          </select>
+          <Button onClick={() => create.mutate({ ...form, serviceId: form.serviceId || undefined, technicianId: form.technicianId || undefined })}>Guardar cita</Button>
         </div>
       </Card>
 
