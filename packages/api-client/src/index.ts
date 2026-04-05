@@ -6,16 +6,20 @@ export type ApiClientConfig = {
   getToken?: () => string | null;
 };
 
+type ApiSuccess<T> = { success: true; data: T };
+
+const unwrap = <T>(response: ApiSuccess<T>) => response.data;
+
 export function createApiClient(config: ApiClientConfig) {
   const http = new HttpClient(config);
 
   return {
-    loginUser: (input: LoginRequest) => http.request<LoginResponse>('/api/auth/login', { method: 'POST', body: JSON.stringify(input) }),
-    getClients: () => http.request<ClientDto[]>('/api/clients'),
-    createClient: (input: CreateClientRequest) => http.request<ClientDto>('/api/clients', { method: 'POST', body: JSON.stringify(input) }),
-    getServices: () => http.request<ServiceDto[]>('/api/services'),
-    createAppointment: (input: CreateAppointmentRequest) =>
-      http.request<{ id: string }>('/api/appointments', { method: 'POST', body: JSON.stringify(input) })
+    loginUser: async (input: LoginRequest) => unwrap(await http.request<ApiSuccess<LoginResponse>>('/api/auth/login', { method: 'POST', body: JSON.stringify(input) })),
+    getClients: async () => unwrap(await http.request<ApiSuccess<{ items: ClientDto[] }>>('/api/clients')).items,
+    createClient: async (input: CreateClientRequest) => unwrap(await http.request<ApiSuccess<ClientDto>>('/api/clients', { method: 'POST', body: JSON.stringify(input) })),
+    getServices: async () => unwrap(await http.request<ApiSuccess<{ items: ServiceDto[] }>>('/api/services')).items,
+    createAppointment: async (input: CreateAppointmentRequest) =>
+      unwrap(await http.request<ApiSuccess<{ id: string }>>('/api/appointments', { method: 'POST', body: JSON.stringify(input) }))
   };
 }
 

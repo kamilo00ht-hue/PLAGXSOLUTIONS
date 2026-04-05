@@ -2,6 +2,37 @@
 
 Plataforma SaaS multi-tenant para empresas de control de plagas en Colombia.
 
+## Arquitectura (alto nivel)
+```text
+                +----------------------+
+                |      apps/web        |
+                |  Next.js + tRPC UI   |
+                +----------+-----------+
+                           |
+          +----------------v----------------+
+          |        src/app/api/*            |
+          | REST + tRPC + NextAuth entry    |
+          +----------------+----------------+
+                           |
+          +----------------v----------------+
+          |       src/server/*              |
+          | auth, routers, services, db     |
+          +----------------+----------------+
+                           |
+                     +-----v------+
+                     | PostgreSQL |
+                     +------------+
+
+   +--------------------------+   +------------------------------+
+   | apps/standalone-java     |   | apps/mobile-android          |
+   | JavaFX thin client       |   | Kotlin MVVM + Retrofit       |
+   +------------+-------------+   +---------------+--------------+
+                |                                 |
+                +------------v--------------------+
+                             |
+                     packages/api-client
+```
+
 ## Stack
 - Next.js (App Router)
 - TypeScript + Tailwind CSS
@@ -24,6 +55,7 @@ npm run db:generate
 npm run db:push
 npm run db:studio
 node --test tests/platform-guardrails.test.mjs
+node --test tests
 ```
 
 ## Setup
@@ -32,6 +64,18 @@ cp .env.example .env
 npm install
 npm run db:push
 npm run dev
+```
+
+## Monorepo development
+```bash
+# Web wrapper
+cd apps/web && npm run dev
+
+# Desktop (JavaFX)
+cd apps/standalone-java && gradle run
+
+# Android
+cd apps/mobile-android && gradle tasks
 ```
 
 ## Variables de entorno
