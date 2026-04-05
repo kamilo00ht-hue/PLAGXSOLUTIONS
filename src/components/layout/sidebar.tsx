@@ -1,0 +1,41 @@
+'use client';
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+const items = [
+  ['Dashboard', '/dashboard'],
+  ['Clients', '/clients'],
+  ['Schedule', '/schedule'],
+  ['Services', '/services'],
+  ['Technicians', '/technicians'],
+  ['Reports & Analytics', '/reports'],
+  ['Billing', '/billing'],
+  ['Settings', '/settings']
+];
+
+export function Sidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="w-full max-w-[270px] border-r border-cyan-300/20 bg-[#0d1f3b] p-5">
+      <div className="mb-8 flex items-center gap-3">
+        <div className="rounded-xl border border-cyan-300/30 bg-black/20 p-1">
+          <Image src="/img/logo.png" alt="PLAGXSOLUTIONS" width={42} height={42} className="h-10 w-10 object-contain" priority />
+        </div>
+        <div>
+          <p className="text-xs tracking-wider text-cyan-200">PLAGXSOLUTIONS</p>
+          <h2 className="text-sm font-semibold">Business SaaS</h2>
+        </div>
+      </div>
+      <nav className="space-y-2">
+        {items.map(([label, href]) => (
+          <Link key={href} href={href} className={`block rounded-xl px-3 py-2 text-sm ${pathname === href ? 'bg-cyan-400/20 text-cyan-100' : 'text-slate-300 hover:bg-cyan-400/10'}`}>
+            {label}
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  );
+}

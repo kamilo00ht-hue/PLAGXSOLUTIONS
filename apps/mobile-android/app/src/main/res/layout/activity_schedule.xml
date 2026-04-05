@@ -1,0 +1,10 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="16dp"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <EditText android:id="@+id/clientIdInput" android:hint="Client ID" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <EditText android:id="@+id/technicianIdInput" android:hint="Technician ID" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <EditText android:id="@+id/serviceIdInput" android:hint="Service ID" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <EditText android:id="@+id/dateInput" android:hint="ISO Date" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <EditText android:id="@+id/timeInput" android:hint="HH:mm" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    <Button android:id="@+id/saveAppointmentButton" android:text="Save Appointment" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+</LinearLayout>
