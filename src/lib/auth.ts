@@ -34,6 +34,7 @@ export async function registerUser(input: z.infer<typeof registerSchema>) {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET ?? process.env.AUTH_SECRET,
   session: { strategy: 'jwt' },
   providers: [
     Credentials({

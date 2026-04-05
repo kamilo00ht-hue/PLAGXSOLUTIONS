@@ -5,9 +5,18 @@ import { db } from '@/server/db';
 
 const requestBuckets = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_PER_MINUTE = 240;
+const BUCKET_GC_INTERVAL = 5 * 60_000;
+let lastGcRun = 0;
 
 function enforceRateLimit(key: string) {
   const now = Date.now();
+  if (now - lastGcRun > BUCKET_GC_INTERVAL) {
+    for (const [bucketKey, bucket] of requestBuckets.entries()) {
+      if (bucket.resetAt <= now) requestBuckets.delete(bucketKey);
+    }
+    lastGcRun = now;
+  }
+
   const bucket = requestBuckets.get(key);
   if (!bucket || bucket.resetAt <= now) {
     requestBuckets.set(key, { count: 1, resetAt: now + 60_000 });

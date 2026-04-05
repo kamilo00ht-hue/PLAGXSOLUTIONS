@@ -26,7 +26,10 @@ function buildMessageText(input: SendWhatsAppMessageInput): string {
 
 export async function sendWhatsAppMessage(input: SendWhatsAppMessageInput): Promise<WhatsAppApiResponse> {
   const phoneNumberId = getRequiredEnv('WHATSAPP_PHONE_NUMBER_ID');
-  const token = getRequiredEnv('WHATSAPP_API_TOKEN');
+  const token = process.env.WHATSAPP_API_KEY ?? process.env.WHATSAPP_API_TOKEN;
+  if (!token) {
+    throw new Error('Missing required environment variable: WHATSAPP_API_KEY or WHATSAPP_API_TOKEN');
+  }
 
   const endpoint = `https://graph.facebook.com/${API_VERSION}/${phoneNumberId}/messages`;
   const body = {

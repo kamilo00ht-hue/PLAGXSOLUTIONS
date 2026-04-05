@@ -33,5 +33,18 @@ npm run db:push
 npm run dev
 ```
 
+## Variables de entorno
+Variables mínimas:
+- `DATABASE_URL`
+- `NEXTAUTH_SECRET` (se soporta `AUTH_SECRET` por compatibilidad)
+- `NEXTAUTH_URL`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `WHATSAPP_API_KEY` (se soporta `WHATSAPP_API_TOKEN` por compatibilidad)
+
+## Troubleshooting
+- Si `npm install` falla con `403 Forbidden` en paquetes `@scope/*`, valida políticas de red/proxy corporativo y allowlist del registro npm.
+- Si `npm run dev` reporta `next: not found`, primero resuelve la instalación de dependencias.
+
 ## Producción
 Ver `DEPLOYMENT.md` y `Dockerfile`.
