@@ -23,6 +23,7 @@ npm run typecheck
 npm run db:generate
 npm run db:push
 npm run db:studio
+node --test tests/platform-guardrails.test.mjs
 ```
 
 ## Setup

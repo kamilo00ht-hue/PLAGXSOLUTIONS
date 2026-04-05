@@ -27,8 +27,10 @@ Date: 2026-04-05
 
 Commands executed:
 - `npm install` → fails with `403 Forbidden` for `@tanstack/react-query`.
+- `HTTPS_PROXY= HTTP_PROXY= npm install --https-proxy= --proxy=` → same `403 Forbidden`, confirming registry/policy block instead of local proxy misconfiguration.
 - `npm run typecheck` → fails because packages are not installed.
 - `npm run dev` / `npm run build` → fail because `next` binary is missing (not installed due above).
+- `node --test tests/platform-guardrails.test.mjs` → passes (static guardrail checks for env/auth/metrics/WhatsApp compatibility).
 
 ## 3) Security review summary
 
@@ -44,6 +46,7 @@ Commands executed:
 1. Unblock npm registry access (allow scoped packages, especially `@tanstack/*`, `@trpc/*`).
 2. Run full CI: install, typecheck, lint, tests, build.
 3. Add integration tests for auth, tenant isolation, and CRUD flows.
+   - Current repository now includes basic guardrail tests under `tests/platform-guardrails.test.mjs`.
 4. Add DB migrations and seed script.
 5. Replace pseudo-PDF export implementation with real PDF generator library.
 6. Move rate limiting and background jobs (WhatsApp reminders) to durable infra.
