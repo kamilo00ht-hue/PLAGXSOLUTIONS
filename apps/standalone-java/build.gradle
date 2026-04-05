@@ -1,0 +1,25 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+def platform = org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'win' : (org.gradle.internal.os.OperatingSystem.current().isMacOsX() ? 'mac' : 'linux')
+
+dependencies {
+    implementation "org.openjfx:javafx-base:21.0.4:${platform}"
+    implementation "org.openjfx:javafx-graphics:21.0.4:${platform}"
+    implementation "org.openjfx:javafx-controls:21.0.4:${platform}"
+}
+
+application {
+    mainClass = 'com.plagx.desktop.PlagXDesktopApp'
+}

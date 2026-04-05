@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:label="PlagX Mobile"
+        android:supportsRtl="true">
+        <activity android:name="com.plagx.mobile.ui.ScheduleAppointmentActivity" />
+        <activity android:name="com.plagx.mobile.ui.CreateClientActivity" />
+        <activity android:name="com.plagx.mobile.ui.ClientsActivity" />
+        <activity android:name="com.plagx.mobile.ui.DashboardActivity" />
+        <activity android:name="com.plagx.mobile.ui.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
