@@ -18,6 +18,11 @@ backend/src
 │   │   └── jwt-auth.guard.ts
 │   └── strategies
 │       └── jwt.strategy.ts
+├── clients
+│   ├── entities
+│   │   └── client.entity.ts
+│   ├── clients.module.ts
+│   └── clients.service.ts
 ├── reports
 │   ├── dto
 │   │   ├── create-report.dto.ts
@@ -68,6 +73,13 @@ backend/src
 - `passwordHash: string`
 - `role: 'admin' | 'tecnico' | 'cliente'`
 
+### Client
+- `id: number`
+- `nombre: string`
+- `email: string`
+- `telefono?: string`
+- `reportes: Report[]`
+
 ### Report
 - `id: number`
 - `cliente: string`
@@ -75,9 +87,11 @@ backend/src
 - `tipoPlaga: string`
 - `tecnicoResponsable: string`
 - `estado: pendiente | en_proceso | completado`
+- `clientId: number`
+- `client: Client`
 - `autor: { userId: number; email: string; role: string }`
-- `createdAt: string (ISO)`
-- `updatedAt: string (ISO)`
+- `createdAt: Date`
+- `updatedAt: Date`
 
 ## 6) Escenario de negocio (control de plagas)
 Cuando un técnico autenticado registra una fumigación para un restaurante o bodega, el sistema conserva automáticamente la autoría para auditoría interna, seguimiento de calidad del servicio y evidencia frente al cliente.

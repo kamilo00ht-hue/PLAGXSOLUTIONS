@@ -5,9 +5,14 @@ import { ReportService } from './report.service';
 
 describe('ReportController', () => {
   let controller: ReportController;
-  let service: ReportService;
+
+  const reportService = {
+    create: jest.fn(),
+    findAll: jest.fn()
+  };
 
   const createDto: CreateReportDto = {
+    clientId: 2,
     cliente: 'Cliente Controlador',
     fechaServicio: '2026-04-21',
     tipoPlaga: 'Termitas',
@@ -24,26 +29,29 @@ describe('ReportController', () => {
   };
 
   beforeEach(async () => {
+    jest.clearAllMocks();
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ReportController],
-      providers: [ReportService]
+      providers: [{ provide: ReportService, useValue: reportService }]
     }).compile();
 
     controller = module.get<ReportController>(ReportController);
-    service = module.get<ReportService>(ReportService);
   });
 
-  it('should create report through controller', () => {
-    const created = controller.create(createDto, request);
+  it('should create report through controller', async () => {
+    reportService.create.mockResolvedValue({ id: 1, ...createDto, autor: request.user });
+
+    const created = await controller.create(createDto, request);
     expect(created.id).toBeDefined();
-    expect(created.cliente).toBe(createDto.cliente);
+    expect(created.clientId).toBe(createDto.clientId);
     expect(created.autor.email).toBe(request.user.email);
   });
 
-  it('should return all reports through controller', () => {
-    service.create(createDto, request.user);
+  it('should return all reports through controller', async () => {
+    reportService.findAll.mockResolvedValue([{ id: 1 }]);
 
-    const reports = controller.findAll();
+    const reports = await controller.findAll();
     expect(reports).toHaveLength(1);
   });
 });

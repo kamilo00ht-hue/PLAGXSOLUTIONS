@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export enum ReportStatus {
   PENDIENTE = 'pendiente',
@@ -8,6 +8,11 @@ export enum ReportStatus {
 }
 
 export class CreateReportDto {
+  @ApiProperty({ example: 3 })
+  @IsNumber()
+  @IsNotEmpty()
+  clientId!: number;
+
   @ApiProperty({ example: 'Restaurante El Roble' })
   @IsString()
   @IsNotEmpty()
