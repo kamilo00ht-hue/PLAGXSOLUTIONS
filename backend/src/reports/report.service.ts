@@ -1,32 +1,45 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Client } from '../clients/entities/client.entity';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
-import { Report } from './entities/report.entity';
+import { Report, ReportAuthor } from './entities/report.entity';
 
 @Injectable()
 export class ReportService {
-  private reports: Report[] = [];
-  private nextId = 1;
+  constructor(
+    @InjectRepository(Report)
+    private readonly reportRepository: Repository<Report>,
+    @InjectRepository(Client)
+    private readonly clientRepository: Repository<Client>
+  ) {}
 
-  create(createReportDto: CreateReportDto): Report {
-    const now = new Date().toISOString();
-    const report: Report = {
-      id: this.nextId++,
-      ...createReportDto,
-      createdAt: now,
-      updatedAt: now
-    };
+  async create(createReportDto: CreateReportDto, author: ReportAuthor): Promise<Report> {
+    const { clientId, ...reportData } = createReportDto;
 
-    this.reports.push(report);
-    return report;
+    const client = await this.clientRepository.findOne({ where: { id: clientId } });
+
+    if (!client) {
+      throw new NotFoundException(`Cliente con ID ${clientId} no encontrado`);
+    }
+
+    const report = this.reportRepository.create({
+      ...reportData,
+      clientId: client.id,
+      client,
+      autor: author
+    });
+
+    return this.reportRepository.save(report);
   }
 
-  findAll(): Report[] {
-    return this.reports;
+  findAll(): Promise<Report[]> {
+    return this.reportRepository.find();
   }
 
-  findOne(id: number): Report {
-    const report = this.reports.find((item) => item.id === id);
+  async findOne(id: number): Promise<Report> {
+    const report = await this.reportRepository.findOne({ where: { id } });
 
     if (!report) {
       throw new NotFoundException(`Informe con ID ${id} no encontrado`);
@@ -35,21 +48,20 @@ export class ReportService {
     return report;
   }
 
-  update(id: number, updateReportDto: UpdateReportDto): Report {
-    const report = this.findOne(id);
-    const updatedReport: Report = {
-      ...report,
-      ...updateReportDto,
-      updatedAt: new Date().toISOString()
-    };
+  async update(id: number, updateReportDto: UpdateReportDto): Promise<Report> {
+    const report = await this.findOne(id);
 
-    this.reports = this.reports.map((item) => (item.id === id ? updatedReport : item));
-    return updatedReport;
+    const updatedReport = this.reportRepository.create({
+      ...report,
+      ...updateReportDto
+    });
+
+    return this.reportRepository.save(updatedReport);
   }
 
-  remove(id: number): { message: string } {
-    const existingReport = this.findOne(id);
-    this.reports = this.reports.filter((item) => item.id !== existingReport.id);
+  async remove(id: number): Promise<{ message: string }> {
+    const existingReport = await this.findOne(id);
+    await this.reportRepository.delete(existingReport.id);
 
     return { message: `Informe con ID ${id} eliminado correctamente` };
   }
