@@ -1,18 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
-import { Report } from './entities/report.entity';
+import { Report, ReportAuthor } from './entities/report.entity';
 
 @Injectable()
 export class ReportService {
   private reports: Report[] = [];
   private nextId = 1;
 
-  create(createReportDto: CreateReportDto): Report {
+  create(createReportDto: CreateReportDto, author: ReportAuthor): Report {
     const now = new Date().toISOString();
     const report: Report = {
       id: this.nextId++,
       ...createReportDto,
+      autor: author,
       createdAt: now,
       updatedAt: now
     };

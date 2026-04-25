@@ -1,9 +1,25 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Request,
+  UseGuards
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateReportDto } from './dto/create-report.dto';
 import { UpdateReportDto } from './dto/update-report.dto';
+import { ReportAuthor } from './entities/report.entity';
 import { ReportService } from './report.service';
+
+interface AuthenticatedRequest {
+  user: ReportAuthor;
+}
 
 @ApiTags('Reports')
 @ApiBearerAuth()
@@ -14,8 +30,8 @@ export class ReportController {
 
   @ApiOperation({ summary: 'Crear un nuevo informe técnico' })
   @Post()
-  create(@Body() createReportDto: CreateReportDto) {
-    return this.reportService.create(createReportDto);
+  create(@Body() createReportDto: CreateReportDto, @Request() request: AuthenticatedRequest) {
+    return this.reportService.create(createReportDto, request.user);
   }
 
   @ApiOperation({ summary: 'Listar todos los informes técnicos' })

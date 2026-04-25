@@ -15,6 +15,14 @@ describe('ReportController', () => {
     estado: ReportStatus.EN_PROCESO
   };
 
+  const request = {
+    user: {
+      userId: 12,
+      email: 'tecnico.controlador@plagx.co',
+      role: 'tecnico'
+    }
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ReportController],
@@ -26,13 +34,14 @@ describe('ReportController', () => {
   });
 
   it('should create report through controller', () => {
-    const created = controller.create(createDto);
+    const created = controller.create(createDto, request);
     expect(created.id).toBeDefined();
     expect(created.cliente).toBe(createDto.cliente);
+    expect(created.autor.email).toBe(request.user.email);
   });
 
   it('should return all reports through controller', () => {
-    service.create(createDto);
+    service.create(createDto, request.user);
 
     const reports = controller.findAll();
     expect(reports).toHaveLength(1);

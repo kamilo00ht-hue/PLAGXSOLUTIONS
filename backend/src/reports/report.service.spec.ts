@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateReportDto, ReportStatus } from './dto/create-report.dto';
+import { ReportAuthor } from './entities/report.entity';
 import { ReportService } from './report.service';
 
 describe('ReportService', () => {
@@ -14,6 +15,12 @@ describe('ReportService', () => {
     estado: ReportStatus.PENDIENTE
   };
 
+  const reportAuthor: ReportAuthor = {
+    userId: 7,
+    email: 'tecnico.qa@plagx.co',
+    role: 'tecnico'
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [ReportService]
@@ -23,14 +30,15 @@ describe('ReportService', () => {
   });
 
   it('should create a report', () => {
-    const result = service.create(createDto);
+    const result = service.create(createDto, reportAuthor);
 
     expect(result.id).toBe(1);
     expect(result.cliente).toBe(createDto.cliente);
+    expect(result.autor.userId).toBe(reportAuthor.userId);
   });
 
   it('should list reports', () => {
-    service.create(createDto);
+    service.create(createDto, reportAuthor);
 
     const reports = service.findAll();
     expect(reports).toHaveLength(1);
@@ -41,14 +49,14 @@ describe('ReportService', () => {
   });
 
   it('should update an existing report', () => {
-    const created = service.create(createDto);
+    const created = service.create(createDto, reportAuthor);
 
     const updated = service.update(created.id, { estado: ReportStatus.COMPLETADO });
     expect(updated.estado).toBe(ReportStatus.COMPLETADO);
   });
 
   it('should remove an existing report', () => {
-    const created = service.create(createDto);
+    const created = service.create(createDto, reportAuthor);
 
     const response = service.remove(created.id);
     expect(response.message).toContain('eliminado correctamente');
