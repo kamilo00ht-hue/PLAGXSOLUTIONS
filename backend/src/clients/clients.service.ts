@@ -7,16 +7,24 @@ import { Client } from './entities/client.entity';
 export class ClientsService {
   constructor(
     @InjectRepository(Client)
-    private readonly clientRepository: Repository<Client>
+    private clientsRepository: Repository<Client>,
   ) {}
 
-  async findOne(id: number): Promise<Client> {
-    const client = await this.clientRepository.findOne({ where: { id } });
+  async create(createClientDto: any): Promise<Client> {
+    // Usamos 'as Client' para decirle a TS que el objeto cumple con la entidad
+    const newClient = this.clientsRepository.create(createClientDto as Client);
+    return await this.clientsRepository.save(newClient);
+  }
 
+  async findAll(): Promise<Client[]> {
+    return await this.clientsRepository.find();
+  }
+
+  async findOne(id: number): Promise<Client> {
+    const client = await this.clientsRepository.findOne({ where: { id } });
     if (!client) {
       throw new NotFoundException(`Cliente con ID ${id} no encontrado`);
     }
-
     return client;
   }
 }

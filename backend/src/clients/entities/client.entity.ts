@@ -6,13 +6,13 @@ export class Client {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 120 })
+  @Column({ type: 'varchar', length: 120 })
   nombre!: string;
 
-  @Column({ length: 120, unique: true })
+  @Column({ type: 'varchar', length: 120, unique: true })
   email!: string;
 
-  @Column({ length: 30, nullable: true })
+  @Column({ type: 'varchar', length: 30, nullable: true })
   telefono?: string;
 
   @OneToMany(() => Report, (report) => report.client)
