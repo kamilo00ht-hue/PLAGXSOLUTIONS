@@ -2,30 +2,45 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 import { ClientsModule } from './clients/clients.module';
 import { ReportModule } from './reports/report.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    // Configuración de variables de entorno
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    // Configuración de la base de datos con persistencia asegurada
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        type: (configService.get<'postgres' | 'mysql'>('DB_TYPE') ?? 'postgres') as 'postgres' | 'mysql',
+        type: 'mysql',
         host: configService.get<string>('DB_HOST', 'localhost'),
-        port: Number(configService.get<number>('DB_PORT', 5432)),
-        username: configService.get<string>('DB_USERNAME', 'postgres'),
-        password: configService.get<string>('DB_PASSWORD', 'postgres'),
-        database: configService.get<string>('DB_NAME', 'plagx'),
+        port: configService.get<number>('DB_PORT', 3306),
+        username: configService.get<string>('DB_USERNAME', 'root'),
+        password: configService.get<string>('DB_PASSWORD', ''),
+        database: configService.get<string>('DB_NAME', 'plagxsolutions'),
+        
+        // Carga automática de entidades del proyecto
         autoLoadEntities: true,
-        synchronize: false
-      })
+        
+        // PROTECCIÓN DE DATOS: Desactivado para evitar pérdida de registros
+        synchronize: false, 
+        
+        // PROTECCIÓN DE DATOS: Desactivado para que no se borren las tablas al reiniciar
+        dropSchema: false, 
+      }),
     }),
+
+    // Módulos de la aplicación PlagXsolutions
     AuthModule,
     UsersModule,
     ClientsModule,
-    ReportModule
-  ]
+    ReportModule,
+  ],
 })
 export class AppModule {}
